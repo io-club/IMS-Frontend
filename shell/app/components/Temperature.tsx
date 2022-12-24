@@ -86,10 +86,10 @@ export default function Temperature(props: {style: CSSProperties}) {
     }
     const graphStyle: CSSProperties = {
         position: "absolute",
-        left: -10,
-        bottom: -5,
-        height: 'calc(100% - 39px)',
-        width: 'calc(100% + 20px)',
+        left: -14,
+        bottom: 12,
+        height: 'calc(100% - 60px)',
+        width: 'calc(100% + 28px)',
         borderRadius: '12px'
     }
     return <div style={props.style}>
@@ -118,8 +118,8 @@ function getGradient(ctx: CanvasRenderingContext2D, chartArea: ChartArea) {
         width = chartWidth;
         height = chartHeight;
         gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
-        gradient.addColorStop(0, 'rgba(146, 126, 247, 0)');
-        gradient.addColorStop(0.3, 'rgba(146, 126, 247, 0.2)');
+        gradient.addColorStop(0.1, 'rgba(146, 126, 247, 0)');
+        gradient.addColorStop(0.7, 'rgba(146, 126, 247, 0.2)');
         gradient.addColorStop(1, 'rgba(146, 126, 247, 0.3)');
     }
 
