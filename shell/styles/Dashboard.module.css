@@ -3,6 +3,7 @@
     flex-direction: column;
     justify-content: flex-start;
     width: var(--contentBlockWidth);
+    max-width: 1366px;
     height: var(--contentBlockHeight);
     padding: 38px 80px;
 }

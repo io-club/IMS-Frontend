@@ -1,7 +1,7 @@
 import {Card} from "./Cards";
 import {CSSProperties} from "react";
 
-export default function HeadsUp(props: {style: CSSProperties}) {
+export default function HeadsUp(props: { style: CSSProperties }) {
     return (
         <div style={props.style}>
             <Card
@@ -9,7 +9,7 @@ export default function HeadsUp(props: {style: CSSProperties}) {
                 version={'large'}
                 title={'运行正常'}
             >
-                <HeadsUpList />
+                <HeadsUpList/>
             </Card>
         </div>
     );
@@ -23,7 +23,8 @@ function HeadsUpList() {
         alignItems: 'center',
         height: '56px',
         isolation: 'isolate',
-        gap: '16px'
+        gap: '16px',
+        padding: '8px 24px 8px 16px'
     }
     const listIcon: CSSProperties = {
         display: "inline-block",

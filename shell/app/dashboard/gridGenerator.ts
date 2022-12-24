@@ -25,10 +25,10 @@ export default class GridGenerator {
     }
 
     pickCard(props: Subgrid): CSSProperties {
-        const a = clamp(props.x, 1, this.frX)
-        const b = clamp(props.y, 1, this.frY)
-        const c = clamp(props.x + props.frX, 2, this.frX + 1)
-        const d = clamp(props.y + props.frY, 2, this.frY + 1)
+        const a = clamp(props.y, 1, this.frY)
+        const b = clamp(props.x, 1, this.frX)
+        const c = clamp(props.y + props.frY, 2, this.frY + 1)
+        const d = clamp(props.x + props.frX, 2, this.frX + 1)
         return {gridArea: `${a} / ${b} / ${c} / ${d}`} as CSSProperties
     }
     wrapper(): CSSProperties {
