@@ -88,18 +88,19 @@ export default function Temperature(props: {style: CSSProperties}) {
         position: "absolute",
         left: -10,
         bottom: -5,
-        height: 'calc(100% - 22px)',
+        height: 'calc(100% - 39px)',
         width: 'calc(100% + 20px)',
         borderRadius: '12px'
     }
     return <div style={props.style}>
         <Card title={'温度'}>
-            <span
-                className={[cardStyle.Description, cardStyle.Background].join(' ')}
-                style={{zIndex: 9, backgroundColor: 'rgb(231, 224, 236)'}}
+            <div
+                className={cardStyle.BigNumber}
+                style={{position: "absolute", transform: "unset", left: 'unset', right: '12px', top: '9px', color: '#492532'}}
             >
-                当前温度: 40
-            </span>
+                40
+                <span>°C</span>
+            </div>
             <div style={graphStyle}>
                 <Line options={chartOptions} data={data} />
             </div>
