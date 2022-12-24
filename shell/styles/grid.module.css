@@ -1,3 +1,6 @@
 .GridWrapper {
     display: grid;
+    height: 100%;
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
 }

@@ -1,0 +1,19 @@
+.SlugButton {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 24px 10px 16px;
+    gap: 8px;
+    height: 40px;
+    background: #E8DEF8;
+    border-radius: 100px;
+    border: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.1px;
+    color: #1D192B;
+}
