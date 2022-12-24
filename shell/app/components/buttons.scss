@@ -1,0 +1,9 @@
+@use "@material/button/styles";
+@use "@material/button";
+
+.mdc-button {
+    @include button.ink-color(#1D192B);
+    @include button.shape-radius(999px);
+    @include button.container-fill-color(#E8DEF8);
+    font-family: unset;
+}
