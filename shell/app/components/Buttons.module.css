@@ -4,7 +4,7 @@
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 10px 24px 10px 16px;
+    padding: 10px 16px 10px 16px;
     gap: 8px;
     height: 40px;
     border-radius: 999px;
@@ -15,4 +15,38 @@
     line-height: 20px;
     text-align: center;
     letter-spacing: 0.1px;
+}
+
+.RippleButton {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    letter-spacing: 0.1px;
+}
+
+.WithIcon {
+    padding: 10px 24px 10px 16px;
+}
+
+.OnlyIcon {
+    padding: 10px 12px 10px 12px;
+}
+
+.Disabled {
+    filter: saturate(.2);
+    opacity: .8;
+    cursor: not-allowed !important;
+}
+
+.FillHeight {
+    height: 100% !important;
 }

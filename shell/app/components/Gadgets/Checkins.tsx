@@ -1,7 +1,7 @@
-import {Card} from "./Cards";
+import {Card} from "../Cards";
 import {CSSProperties} from "react";
 import Image from "next/image";
-import checkinStyle from './Checkins.module.css'
+import checkinStyle from '../Checkins.module.css'
 
 export default function Checkins(props: {style: CSSProperties}) {
     const data = [

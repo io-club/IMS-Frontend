@@ -1,4 +1,4 @@
-import {Card} from "./Cards";
+import {Card} from "../Cards";
 import {CSSProperties} from "react";
 
 export default function HeadsUp(props: { style: CSSProperties }) {

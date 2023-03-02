@@ -1,9 +1,16 @@
 @use "@material/button/styles";
 @use "@material/button";
 
-.mdc-button {
+.mdc-button--slug {
     @include button.ink-color(#1D192B);
     @include button.shape-radius(999px);
     @include button.container-fill-color(#E8DEF8);
+    font-family: unset;
+}
+
+.mdc-button--ripple {
+    @include button.ink-color(#1D192B);
+    @include button.shape-radius(0);
+    @include button.container-fill-color(rgba(0, 0, 0, 0));
     font-family: unset;
 }

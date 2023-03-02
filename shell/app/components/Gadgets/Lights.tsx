@@ -1,8 +1,8 @@
 'use client'
 
 import {CSSProperties, useState} from "react";
-import {Card} from "./Cards";
-import cardStyle from './Card.module.css'
+import {Card} from "../Cards";
+import cardStyle from '../Card.module.css'
 
 type LightsParam = {
     style: CSSProperties

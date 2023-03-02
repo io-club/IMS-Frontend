@@ -1,8 +1,8 @@
 'use client'
 
 import {CSSProperties} from "react";
-import {Card} from "./Cards";
-import cardStyle from './Card.module.css'
+import {Card} from "../Cards";
+import cardStyle from '../Card.module.css'
 import {
     Chart as ChartJS,
     CategoryScale,
