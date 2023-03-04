@@ -14,7 +14,7 @@ export const registerUser = async (
         setFeedbackMessage('Please provide username')
         return
     }
-    let response = await fetch(`/api/auth/register/begin/${username}`)
+    let response = await fetch(`/api/v1/auth/register/begin/${username}`)
     console.log(response)
 
     let attResp
@@ -59,7 +59,7 @@ export const registerUser = async (
     // POST the response to the endpoint that calls
     // @simplewebauthn/server -> verifyRegistrationResponse()
     const verificationResp = await fetch(
-        `/api/auth/register/finish/${trim(baseID)}`,
+        `/api/v1/auth/register/finish/${trim(baseID)}`,
         {
             method: 'POST',
             headers: {
