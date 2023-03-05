@@ -1,4 +1,4 @@
-import { authenticateStatusState } from './index'
+import { AuthenticateStatus, authenticateStatusState } from './index'
 import { useAtom } from 'jotai/react/useAtom'
 
 export const useClearAuth = () => {
@@ -6,11 +6,11 @@ export const useClearAuth = () => {
         authenticateStatusState
     )
 
-    if (authenticateStatus === 'uninitialized') {
+    if (authenticateStatus === AuthenticateStatus.UNINITIALIZED) {
         return
     }
-    if (authenticateStatus === 'failed') {
-        setAuthenticateStatus('uninitialized')
+    if (authenticateStatus === AuthenticateStatus.FAILED) {
+        setAuthenticateStatus(AuthenticateStatus.UNINITIALIZED)
         return;
     }
 }

@@ -1,5 +1,5 @@
 import { ChangeEvent, useEffect, useState } from 'react'
-import { authenticateStatusState, registerUser } from '../../work/auth'
+import { AuthenticateStatus, authenticateStatusState, registerUser, loginUser } from '../../work/auth'
 import { useAtom } from 'jotai'
 import cardStyles from '../components/Card.module.css'
 import popStyles from '../../styles/Pops.module.css'
@@ -21,7 +21,11 @@ export default function LandPane() {
         useState<UserWindowStage>('uninitialized')
 
     const handleRegisterUser = () => {
-        registerUser(username, setAuthStatus, () => {}).then((r) => {})
+        registerUser(username, setAuthStatus, () => { }).then((r) => { })
+    }
+
+    const handleLoginUser = () => {
+        loginUser(username, setAuthStatus, () => { }).then((r) => { })
     }
 
     const handleUsernameChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -54,6 +58,41 @@ export default function LandPane() {
                 <SlugButtons
                     className={popStyles.RegisterProceed}
                     onClick={handleRegisterUser}
+                    disabled={username.length < 3}
+                >
+                    Pass
+                </SlugButtons>
+            </>
+        )
+    }
+
+    const askForLogin = () => {
+        return (
+            <>
+                <div className={popStyles.RegisterBack}>
+                    <SlugButtons
+                        icon={{
+                            image: { src: '/mdi/arrow_back.svg' },
+                            alt: 'back arrow',
+                        }}
+                        onClick={() => {
+                            setUserWindowStage('uninitialized')
+                        }}
+                        className={popStyles.RegisterBackButton}
+                    />
+                </div>
+                <div className={popStyles.RegisterInput}>
+                    <div
+                        style={{ maxWidth: '80%' }}
+                        className={cardStyles.Title}
+                    >
+                        Username
+                    </div>
+                    <input onChange={handleUsernameChange} />
+                </div>
+                <SlugButtons
+                    className={popStyles.RegisterProceed}
+                    onClick={handleLoginUser}
                     disabled={username.length < 3}
                 >
                     Pass
@@ -137,11 +176,11 @@ export default function LandPane() {
 
     const registration = () => {
         switch (authStatus) {
-            case 'successful':
+            case AuthenticateStatus.SUCCESSFUL:
                 return loggedIn()
-            case 'uninitialized':
+            case AuthenticateStatus.UNINITIALIZED:
                 return askForRegistration()
-            case 'registered':
+            case AuthenticateStatus.REGISTERED:
                 return <h3>Already Registered</h3>
             default:
                 return <></>
@@ -149,17 +188,16 @@ export default function LandPane() {
     }
 
     const login = () => {
-        return (
-            <SlugButtons
-                icon={{
-                    image: { src: '/mdi/arrow_back.svg' },
-                    alt: 'back arrow',
-                }}
-                onClick={() => {
-                    setUserWindowStage('uninitialized')
-                }}
-            />
-        )
+        switch (authStatus) {
+            case AuthenticateStatus.SUCCESSFUL:
+                return loggedIn()
+            case AuthenticateStatus.UNINITIALIZED:
+                return askForLogin()
+            case AuthenticateStatus.LOGGEDIN:
+                return <h3>Already Logged in</h3>
+            default:
+                return <></>;
+        }
     }
 
     const switcher = () => {

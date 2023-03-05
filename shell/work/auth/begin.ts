@@ -1,8 +1,7 @@
 'use client'
 
-import { startRegistration } from '@simplewebauthn/browser'
+import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { AuthenticateStatus, authenticateStatusState } from './index'
-import { trim } from '../strings'
 
 export const registerUser = async (
     username: string,
@@ -18,18 +17,18 @@ export const registerUser = async (
     console.log(response)
 
     let attResp
-    let baseID
+    let userID
     try {
         // Pass the options to the authenticator and wait for a response
         const fetchedResponse = await response.json()
         if (fetchedResponse['failed']) {
             console.log(fetchedResponse['msg'])
-            setAuthenticateStatus('registered')
+            setAuthenticateStatus(AuthenticateStatus.REGISTERED)
         }
         attResp = await startRegistration(
             fetchedResponse['options']['publicKey']
         )
-        baseID = await fetchedResponse['options']['publicKey']['user']['id']
+        userID = await fetchedResponse['user']['id']
     } catch (error) {
         // Some basic error handling
         if (error instanceof Error) {
@@ -53,13 +52,10 @@ export const registerUser = async (
         throw error
     }
 
-    console.log('before trimming', baseID)
-    console.log('after  trimming', trim(baseID))
-
     // POST the response to the endpoint that calls
     // @simplewebauthn/server -> verifyRegistrationResponse()
     const verificationResp = await fetch(
-        `/api/v1/auth/register/finish/${trim(baseID)}`,
+        `/api/v1/auth/register/finish/${userID}`,
         {
             method: 'POST',
             headers: {
@@ -74,14 +70,88 @@ export const registerUser = async (
 
     // Show UI appropriate for the `verified` status
     if (verificationJSON && verificationJSON.verified) {
-        setAuthenticateStatus('successful')
+        setAuthenticateStatus(AuthenticateStatus.SUCCESSFUL)
         console.log(attResp)
         setFeedbackMessage(
             `Hello ${JSON.stringify(attResp['id'])}
                 `
         )
     } else {
-        setAuthenticateStatus('failed')
+        setAuthenticateStatus(AuthenticateStatus.FAILED)
+        setFeedbackMessage(
+            `Oh no, something went wrong! ${JSON.stringify(
+                verificationJSON['msg']
+            )}`
+        )
+    }
+}
+
+export const loginUser = async (
+    username: string,
+    setAuthenticateStatus: (s: AuthenticateStatus) => void,
+    setFeedbackMessage: (s: string) => void
+) => {
+    let response = await fetch(`/api/v1/auth/login/begin/${username}`)
+    let attResp
+    let userID
+    try {
+        const fetchedResponse = await response.json()
+        console.log(fetchedResponse)
+        if (fetchedResponse['failed']) {
+            console.log(fetchedResponse['msg'])
+            setAuthenticateStatus(AuthenticateStatus.FAILED)
+        }
+        attResp = await startAuthentication(
+            fetchedResponse['options']['publicKey']
+        )
+        userID = fetchedResponse['user']['id']
+    } catch (error) {
+        // Some basic error handling
+        if (error instanceof Error) {
+            setFeedbackMessage(error.message)
+            switch (error.name) {
+                case 'InvalidStateError':
+                    console.log(
+                        'Error: Authenticator was probably already registered by user'
+                    )
+                    break
+                case 'NotAllowedError':
+                    console.log('Error: Authentication cancelled')
+                    break
+                default:
+                    console.log(error.message)
+                    break
+            }
+        } else {
+            console.log(error)
+        }
+        throw error
+    }
+
+    // POST the response to the endpoint that calls
+    // @simplewebauthn/server -> verifyAuthenticationResponse()
+    console.log(attResp)
+    const verificationResp = await fetch(`/api/v1/auth/login/finish/${userID}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(attResp),
+    });
+
+    // Wait for the results of verification
+    const verificationJSON = await verificationResp.json();
+
+    // Show UI appropriate for the `verified` status
+    if (verificationJSON && verificationJSON.verified) {
+        setAuthenticateStatus(AuthenticateStatus.SUCCESSFUL)
+        console.log(attResp)
+        setFeedbackMessage(
+            `Hello ${JSON.stringify(attResp['id'])}
+                `
+        )
+    } else {
+        setAuthenticateStatus(AuthenticateStatus.FAILED)
         setFeedbackMessage(
             `Oh no, something went wrong! ${JSON.stringify(
                 verificationJSON['msg']
