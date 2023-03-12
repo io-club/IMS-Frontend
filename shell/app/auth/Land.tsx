@@ -5,9 +5,9 @@ import cardStyles from '../components/Card.module.css'
 import popStyles from '../../styles/Pops.module.css'
 import buttonStyles from '../components/Buttons.module.css'
 import SlugButtons from '../components/SlugButtons'
-import RippleButton from '../components/RippleButton'
 import Image from 'next/image'
 import { userWindowsActivationStatus } from '../Layouts'
+import { initAuthentication } from '../../work/auth/login'
 
 type UserWindowStage = 'login' | 'register' | 'present' | 'uninitialized'
 
@@ -137,7 +137,7 @@ export default function LandPane() {
         } else {
             switch (userWindowStage) {
                 case 'uninitialized':
-                    className.push(popStyles.Tiny)
+                    className.push(popStyles.Small)
                     break
                 case 'login':
                     className.push(popStyles.Small)
@@ -153,24 +153,24 @@ export default function LandPane() {
 
     const uninitialized = () => {
         return (
-            <div style={{ display: 'flex' }}>
-                <RippleButton
-                    className={buttonStyles.FillHeight}
-                    onClick={() => {
-                        setUserWindowStage('login')
-                    }}
-                >
-                    登录
-                </RippleButton>
-                <RippleButton
-                    className={buttonStyles.FillHeight}
+            <>
+                <input
+                    type="text"
+                    name="username"
+                    autoFocus
+                    className={popStyles.LoginInput}
+                    placeholder={'选择 PassKey'}
+                    autoComplete="webauthn"
+                />
+                <SlugButtons
+                    className={popStyles.RegisterButton}
                     onClick={() => {
                         setUserWindowStage('register')
                     }}
                 >
                     注册
-                </RippleButton>
-            </div>
+                </SlugButtons>
+            </>
         )
     }
 
@@ -228,6 +228,7 @@ export default function LandPane() {
             className={getWrapperClassName()}
             onClick={() => {
                 setUserWindowActivation('pop')
+                initAuthentication()
             }}
         >
             {switcher()}
