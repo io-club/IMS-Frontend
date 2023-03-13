@@ -22,6 +22,10 @@
     grid-template-rows: repeat(1, 1fr);
 }
 
+.PopInline {
+    border-radius: 25px;
+}
+
 .Tiny {
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(1, 1fr);

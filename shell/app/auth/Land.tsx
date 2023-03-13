@@ -12,11 +12,12 @@ import Image from 'next/image'
 import { userWindowsActivationStatus } from '../Layouts'
 import AskForRegistration from './Registration'
 import UserProfileCapsule from './Profile'
+import { browserSupportsWebAuthnAutofill } from '@simplewebauthn/browser'
 
 type UserWindowStage = 'register' | 'present' | 'uninitialized'
 
 export default function LandPane() {
-    const [authStatus, setAuthStatus] = useAtom(appUserStorageState)
+    const [appUserStatus, setAppUserStatus] = useAtom(appUserStorageState)
     const [userWindowActivation, setUserWindowActivation] = useAtom(
         userWindowsActivationStatus
     )
@@ -26,7 +27,21 @@ export default function LandPane() {
     const handleCancelRegisteration = () => {
         setUserWindowStage('uninitialized')
     }
+    const testBrowserAutofill = async (): Promise<boolean> => {
+        if (appUserStatus.useAutofill === null) {
+            const useAutofill = await browserSupportsWebAuthnAutofill()
+            setAppUserStatus({
+                ...appUserStatus,
+                useAutofill: useAutofill,
+            })
+            return useAutofill
+        }
+        return appUserStatus.useAutofill
+    }
 
+    useEffect(() => {
+        testBrowserAutofill()
+    })
     useEffect(() => {
         setUserWindowStage('uninitialized')
     }, [userWindowActivation])
@@ -40,6 +55,7 @@ export default function LandPane() {
             switch (userWindowStage) {
                 case 'uninitialized':
                     className.push(popStyles.Small)
+                    className.push(popStyles.PopInline)
                     break
                 case 'present':
                 case 'register':
@@ -53,16 +69,32 @@ export default function LandPane() {
     const uninitialized = () => {
         return (
             <>
-                <input
-                    type="text"
-                    name="username"
-                    autoFocus
-                    className={popStyles.LoginInput}
-                    placeholder={'选择 PassKey'}
-                    autoComplete="webauthn"
-                />
+                {appUserStatus.useAutofill ? (
+                    <input
+                        type="text"
+                        name="username"
+                        autoFocus
+                        className={popStyles.LoginInput}
+                        placeholder={'选择 PassKey'}
+                        autoComplete="webauthn"
+                    />
+                ) : (
+                    <SlugButtons
+                        className={popStyles.RegisterButton}
+                        onClick={() => {
+                            startUserAuthentication(
+                                false,
+                                () => {},
+                                () => {}
+                            )
+                        }}
+                    >
+                        登录
+                    </SlugButtons>
+                )}
+
                 <SlugButtons
-                    className={popStyles.RegisterButton}
+                    className={popStyles.RegisterButton}PopUnexpanded
                     onClick={() => {
                         setUserWindowStage('register')
                     }}
@@ -74,7 +106,7 @@ export default function LandPane() {
     }
 
     const registration = () => {
-        switch (authStatus.status) {
+        switch (appUserStatus.status) {
             case AuthenticateStatus.SUCCESSFUL:
                 return <UserProfileCapsule />
             case AuthenticateStatus.UNINITIALIZED:
@@ -113,10 +145,13 @@ export default function LandPane() {
             onClick={() => {
                 if (userWindowActivation === 'invisible') {
                     setUserWindowActivation('pop')
-                    startUserAuthentication(
-                        () => {},
-                        () => {}
-                    )
+                    if (appUserStatus.useAutofill) {
+                        startUserAuthentication(
+                            true,
+                            () => {},
+                            () => {}
+                        )
+                    }
                 }
             }}
         >

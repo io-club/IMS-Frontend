@@ -19,6 +19,7 @@ export interface UserStorage {
 export interface AppUserStorage {
     status: AuthenticateStatus
     user: UserStorage | null
+    useAutofill: boolean | null
 }
 
 const lockedForRegistration = (status: AuthenticateStatus): boolean => {
@@ -33,6 +34,7 @@ const lockedForRegistration = (status: AuthenticateStatus): boolean => {
 const appUserStorageState = atom<AppUserStorage>({
     status: AuthenticateStatus.UNINITIALIZED,
     user: null,
+    useAutofill: null
 })
 
 export {
