@@ -1,5 +1,5 @@
 import { atom } from 'jotai'
-import { registerUser, loginUser } from './begin'
+import { registerUser } from './begin'
 
 
 export enum AuthenticateStatus {
@@ -21,4 +21,4 @@ const lockedForRegistration = (status: AuthenticateStatus): boolean => {
 
 const authenticateStatusState = atom<AuthenticateStatus>(AuthenticateStatus.UNINITIALIZED)
 
-export { authenticateStatusState, lockedForRegistration, registerUser, loginUser }
+export { authenticateStatusState, lockedForRegistration, registerUser }
