@@ -80,7 +80,7 @@ export default function LandPane() {
                     />
                 ) : (
                     <SlugButtons
-                        className={popStyles.RegisterButton}
+                        className={popStyles.RegisterInput}
                         onClick={() => {
                             startUserAuthentication(
                                 false,
@@ -94,7 +94,7 @@ export default function LandPane() {
                 )}
 
                 <SlugButtons
-                    className={popStyles.RegisterButton}PopUnexpanded
+                    className={popStyles.RegisterButton}
                     onClick={() => {
                         setUserWindowStage('register')
                     }}
