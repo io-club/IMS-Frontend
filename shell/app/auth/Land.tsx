@@ -80,7 +80,7 @@ export default function LandPane() {
                     />
                 ) : (
                     <SlugButtons
-                        className={popStyles.RegisterInput}
+                        className={popStyles.LoginInput}
                         onClick={() => {
                             startUserAuthentication(
                                 false,
