@@ -1,34 +1,22 @@
-'use client'
-
-import { startRegistration } from '@simplewebauthn/browser'
 import { AuthenticateStatus } from './index'
+import { startAuthentication } from '@simplewebauthn/browser'
 
-export const registerUser = async (
-    username: string,
+export const startUserAuthentication = async (
     setAuthenticateStatus: (s: AuthenticateStatus) => void,
     setFeedbackMessage: (s: string) => void
 ) => {
-    if (username.length === 0) {
-        console.log('username needed')
-        setFeedbackMessage('Please provide username')
-        return
-    }
-    let response = await fetch(`/api/v1/auth/register/begin/${username}`)
-    console.log(response)
-
+    let response = await fetch(`/api/v1/auth/login/begin`)
     let attResp
     let userID
     try {
-        // Pass the options to the authenticator and wait for a response
         const fetchedResponse = await response.json()
+        console.log(fetchedResponse)
         if (fetchedResponse['failed']) {
             console.log(fetchedResponse['msg'])
-            setAuthenticateStatus(AuthenticateStatus.REGISTERED)
+            setAuthenticateStatus(AuthenticateStatus.FAILED)
         }
-        attResp = await startRegistration(
-            fetchedResponse['options']['publicKey']
-        )
-        userID = await fetchedResponse['user']['id']
+        attResp = await startAuthentication(fetchedResponse, true)
+        userID = fetchedResponse['user']['id']
     } catch (error) {
         // Some basic error handling
         if (error instanceof Error) {
@@ -53,9 +41,10 @@ export const registerUser = async (
     }
 
     // POST the response to the endpoint that calls
-    // @simplewebauthn/server -> verifyRegistrationResponse()
+    // @simplewebauthn/server -> verifyAuthenticationResponse()
+    console.log(attResp)
     const verificationResp = await fetch(
-        `/api/v1/auth/register/finish/${userID}`,
+        `/api/v1/auth/login/finish/${userID}`,
         {
             method: 'POST',
             headers: {

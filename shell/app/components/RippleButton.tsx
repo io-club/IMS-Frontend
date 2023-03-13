@@ -1,6 +1,6 @@
 'use client'
 
-import type {ButtonProps} from "./SlugButtons";
+import type { ButtonProps } from './SlugButtons'
 import React, { useEffect, useRef } from 'react'
 import buttonStyle from './Buttons.module.css'
 import { MDCRipple } from '@material/ripple/index'

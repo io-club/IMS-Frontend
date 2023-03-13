@@ -1,24 +1,43 @@
 import { atom } from 'jotai'
-import { registerUser, loginUser } from './begin'
-
+import { registerUser } from './begin'
+import { startUserAuthentication } from './auth'
 
 export enum AuthenticateStatus {
     UNINITIALIZED,
     FAILED,
     REGISTERED,
     SUCCESSFUL,
-    LOGGEDIN
+    LOGGEDIN,
+}
+
+export interface UserStorage {
+    username: string
+    avatarURL: string
+    sesssion: string
+}
+
+export interface AppUserStorage {
+    status: AuthenticateStatus
+    user: UserStorage | null
 }
 
 const lockedForRegistration = (status: AuthenticateStatus): boolean => {
     const lockStatus: AuthenticateStatus[] = [
         AuthenticateStatus.SUCCESSFUL,
         AuthenticateStatus.REGISTERED,
-        AuthenticateStatus.LOGGEDIN
+        AuthenticateStatus.LOGGEDIN,
     ]
     return lockStatus.includes(status)
 }
 
-const authenticateStatusState = atom<AuthenticateStatus>(AuthenticateStatus.UNINITIALIZED)
+const appUserStorageState = atom<AppUserStorage>({
+    status: AuthenticateStatus.UNINITIALIZED,
+    user: null,
+})
 
-export { authenticateStatusState, lockedForRegistration, registerUser, loginUser }
+export {
+    appUserStorageState,
+    lockedForRegistration,
+    registerUser,
+    startUserAuthentication,
+}

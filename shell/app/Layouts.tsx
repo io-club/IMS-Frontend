@@ -30,7 +30,10 @@ export default function Layouts() {
                     }}
                 />
             )}
-            <div className={layoutStyles.UserPop} style={{ position: 'absolute', top: '2em', right: '3em' }}>
+            <div
+                className={layoutStyles.UserPop}
+                style={{ position: 'absolute', top: '2em', right: '3em' }}
+            >
                 <LandPane />
             </div>
             <Dashboard />
