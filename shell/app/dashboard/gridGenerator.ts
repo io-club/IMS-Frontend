@@ -1,4 +1,4 @@
-import {CSSProperties} from "react";
+import { CSSProperties } from 'react'
 
 type GridPreferences = {
     frX: number
@@ -13,7 +13,9 @@ export interface Subgrid {
 }
 
 function clamp(number: number, a: number, b: number): number {
-    return a > b ? Math.min(Math.max(number, b), a) : Math.max(Math.min(number, b), a)
+    return a > b
+        ? Math.min(Math.max(number, b), a)
+        : Math.max(Math.min(number, b), a)
 }
 
 export default class GridGenerator {
@@ -29,12 +31,12 @@ export default class GridGenerator {
         const b = clamp(props.x, 1, this.frX)
         const c = clamp(props.y + props.frY, 2, this.frY + 1)
         const d = clamp(props.x + props.frX, 2, this.frX + 1)
-        return {gridArea: `${a} / ${b} / ${c} / ${d}`} as CSSProperties
+        return { gridArea: `${a} / ${b} / ${c} / ${d}` } as CSSProperties
     }
     wrapper(): CSSProperties {
         return {
             gridTemplateColumns: `repeat(${this.frX}, 1fr)`,
-            gridTemplateRows: `repeat(${this.frY}, 1fr)`
+            gridTemplateRows: `repeat(${this.frY}, 1fr)`,
         }
     }
 }
