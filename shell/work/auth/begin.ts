@@ -14,8 +14,6 @@ export const registerUser = async (
         return
     }
     let response = await fetch(`/api/v1/auth/register/begin/${username}`)
-    console.log(response)
-
     let attResp
     let userID
     try {
@@ -25,8 +23,6 @@ export const registerUser = async (
             console.log(fetchedResponse['msg'])
             setAuthenticateStatus(AuthenticateStatus.REGISTERED)
         }
-        console.log(fetchedResponse['options']);
-        // fetchedResponse.options.publicKey.authenticatorSelection.discoverable_credential = "preferred"
         attResp = await startRegistration(
             fetchedResponse['options']['publicKey']
         )

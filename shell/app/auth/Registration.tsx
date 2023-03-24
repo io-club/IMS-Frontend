@@ -28,6 +28,7 @@ export default function AskForRegistration(props: AskForRegistrationProps) {
             },
             () => {}
         )
+        setUsername('')
     }
 
     return (
@@ -46,7 +47,14 @@ export default function AskForRegistration(props: AskForRegistrationProps) {
                 <div style={{ maxWidth: '80%' }} className={cardStyles.Title}>
                     为 PassKey 起名
                 </div>
-                <input onChange={handleUsernameChange} />
+                <input
+                    onChange={handleUsernameChange}
+                    onKeyUp={(event) => {
+                        if (event.key === 'Enter' && username.length >= 3) {
+                            handleRegisterUser()
+                        }
+                    }}
+                />
             </div>
             <SlugButtons
                 className={popStyles.RegisterProceed}

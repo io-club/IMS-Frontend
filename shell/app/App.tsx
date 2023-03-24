@@ -8,7 +8,7 @@ type UserWindowActivation = 'invisible' | 'pop' | 'sheet'
 export const userWindowsActivationStatus =
     atom<UserWindowActivation>('invisible')
 
-export default function Layouts() {
+export default function App() {
     const [userWindowActivation, setUserWindowActivation] = useAtom(
         userWindowsActivationStatus
     )

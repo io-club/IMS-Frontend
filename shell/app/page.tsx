@@ -1,8 +1,8 @@
 'use client'
 
 import '../styles/globals.css'
-import Layouts from './Layouts'
+import App from './App'
 
 export default function Page() {
-    return <Layouts />
+    return <App />
 }
